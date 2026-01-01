@@ -32,4 +32,31 @@ resource "aws_subnet" "arco_pub_subnet_02" {
   }
 }
 ###############################################################################################################################################################################
+###############################################################################################################################################################################
+
+## private subnet1 ########################################################
+resource "aws_subnet" "arco_prvt_subnet_01" {
+  vpc_id     = aws_vpc.arco_infra.id
+  cidr_block = var.prvt_subnet_01_cidr
+  map_public_ip_on_launch = false  # Enable auto-assigning public IPv4 addresses
+  availability_zone       = var.prvt_subnet_01_az # Specify the availability zone
+
+  tags = {
+    Name = "prvt_subnet_01"
+  }
+}
+
+## private subnet2 ########################################################
+resource "aws_subnet" "arco_app_prvt_subnet_02" {
+  vpc_id     = aws_vpc.arco_infra.id
+  cidr_block = var.prvt_subnet_02_cidr
+  map_public_ip_on_launch = false  # Enable auto-assigning public IPv4 addresses
+  availability_zone       = var.prvt_subnet_02_az   # Specify the availability zone
+
+  tags = {
+    Name = "prvt_subnet_02"
+  }
+}
+
+###############################################################################################################################################################################
 ################################################################################################################################################################################
