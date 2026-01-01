@@ -12,13 +12,10 @@ terraform {
   }
 }
 
-### VPC #################################################################
-resource "aws_vpc" "elpharco-webApp" {
-  cidr_block = var.vpc-cidr
 
-  tags = {
-    Name = "elpharcoVpc"
-  }
+module "network" {
+  source = "./modules/network"
+
+  region    = var.region
+  vpc_cidr  = var.vpc_cidr
 }
-
-
