@@ -10,11 +10,11 @@ output "vpc_id" {
 # }
 
 output "pub_subnet_01_id" {
-    value = aws_subnet.arco_pub_subnet_01
+    value = aws_subnet.arco_pub_subnet_01.id
 }
 
 output "pub_subnet_02_id" {
-    value = aws_subnet.arco_pub_subnet_02
+    value = aws_subnet.arco_pub_subnet_02.id
 }
 #######################################################################################################################################################
 #######################################################################################################################################################
@@ -27,15 +27,15 @@ output "pub_subnet_02_id" {
 # }
 
 output "prvt_subnet_01_id" {
-    value = aws_subnet.arco_prvt_subnet_01
+    value = aws_subnet.arco_prvt_subnet_01.id
 }
 
 output "prvt_subnet_02_id" {
-    value = aws_subnet.arco_app_prvt_subnet_02
+    value = aws_subnet.arco_app_prvt_subnet_02.id
 }
 #######################################################################################################################################################
 #######################################################################################################################################################
 
-output "intgw" {
-    value = aws_internet_gateway.arco_intgw
+output "intgw_id" {
+    value = aws_internet_gateway.arco_intgw.id
 }
