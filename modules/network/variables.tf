@@ -1,15 +1,19 @@
 
+## variable region
 variable "region" {
   type    = string
 }
+###################################
+###################################
 
+## variable vpc
 variable "vpc_cidr" {
   type    = string
 }
 ###################################
 ###################################
 
-# Public subnet Variables
+## variable public_subnet
 variable "pub_subnet_01_cidr" {
   type    = string
 }
@@ -25,7 +29,7 @@ variable "pub_subnet_02_az" {
 ###################################
 ###################################
 
-# Private subnet Variables
+## variable private_subnet
 variable "prvt_subnet_01_cidr" {
     type  = string
 }
