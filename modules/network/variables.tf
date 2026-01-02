@@ -43,3 +43,20 @@ variable "prvt_subnet_02_cidr" {
 variable "prvt_subnet_02_az" {
     type  = string
 }
+###################################
+###################################
+
+## variable db_subnet
+variable "db_subnet_01_cidr" {
+  type    = string
+}
+variable "db_subnet_01_az" {
+  type    = string
+}
+
+variable "db_subnet_02_cidr" {
+  type    = string
+}
+variable "db_subnet_02_az" {
+  type    = string
+}

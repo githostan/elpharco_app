@@ -26,4 +26,8 @@ module "network" {
   prvt_subnet_01_az   = var.prvt_subnet_01_az
   prvt_subnet_02_cidr = var.prvt_subnet_02_cidr
   prvt_subnet_02_az   = var.prvt_subnet_02_az
+  db_subnet_01_cidr   = var.db_subnet_01_cidr
+  db_subnet_01_az     = var.db_subnet_01_az
+  db_subnet_02_cidr   = var.db_subnet_02_cidr
+  db_subnet_02_az     = var.db_subnet_02_az
 }

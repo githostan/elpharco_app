@@ -69,6 +69,41 @@ resource "aws_subnet" "arco_prvt_subnet_02" {
 ###############################################################################################################################################################################
 ###############################################################################################################################################################################
 
+## db subnet ########################################################
+resource "aws_subnet" "arco_db_subnet_01" {
+  vpc_id     = aws_vpc.arco_infra.id
+  cidr_block = var.db_subnet_01_cidr
+  map_public_ip_on_launch = false  # enable auto-assigning public IPv4 addresses
+  availability_zone       = var.db_subnet_01_az  # specify the availability zone
+
+  tags = {
+    Name = "arco_db_subnet_01"
+  }
+}
+
+## db subnet ########################################################
+resource "aws_subnet" "arco_db_subnet_02" {
+  vpc_id     = aws_vpc.arco_infra.id
+  cidr_block = var.db_subnet_02_cidr
+  map_public_ip_on_launch = false  # Enable auto-assigning public IPv4 addresses
+  availability_zone       = var.db_subnet_02_az  # Specify the availability zone
+
+  tags = {
+    Name = "arco_db_subnet_02"
+  }
+}
+
+resource "aws_db_subnet_group" "arco_db_subnet_grp" {
+  name       = "db_subnet_grp"
+  subnet_ids = [aws_subnet.arco_db_subnet_01.id, aws_subnet.arco_db_subnet_02.id]
+
+  tags = {
+    Name = "arco_db_subnet_grp"
+  }
+}
+###############################################################################################################################################################################
+###############################################################################################################################################################################
+
 # internet gateway provides the vpc with a path to the public internet, enabling public subnets and the nat gateway 
 # to send outbound traffic.
 
