@@ -23,7 +23,7 @@ resource "aws_subnet" "arco_pub_subnet_01" {
   availability_zone       = var.pub_subnet_01_az  # Specify the availability zone
 
   tags = {
-    Name = "pub_subnet_01"
+    Name = "arco_pub_subnet_01"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_subnet" "arco_pub_subnet_02" {
   availability_zone       = var.pub_subnet_02_az  # specify the availability zone
 
   tags = {
-    Name = "pub_subnet_02"
+    Name = "arco_pub_subnet_02"
   }
 }
 ###############################################################################################################################################################################
@@ -52,7 +52,7 @@ resource "aws_subnet" "arco_prvt_subnet_01" {
   availability_zone       = var.prvt_subnet_01_az # specify the availability zone
 
   tags = {
-    Name = "prvt_subnet_01"
+    Name = "arco_prvt_subnet_01"
   }
 }
 
@@ -64,7 +64,7 @@ resource "aws_subnet" "arco_app_prvt_subnet_02" {
   availability_zone       = var.prvt_subnet_02_az   # specify the availability zone
 
   tags = {
-    Name = "prvt_subnet_02"
+    Name = "arco_prvt_subnet_02"
   }
 }
 
@@ -99,3 +99,20 @@ resource "aws_eip" "arco_eip" {
     Name = "arco_eip"
   }
 }      
+
+###############################################################################################################################################################################
+###############################################################################################################################################################################
+
+# nat gateway allows instances in private subnets (app & db tiers) to access the internet for updates, patches,
+# downloading software, and external dependencies, while preventing inbound internet traffic from reaching them. 
+# it must be placed in a public subnet so it can route traffic through the internet gateway using its elastic ip.
+
+resource "aws_nat_gateway" "arco_natgw" {
+  allocation_id                  = aws_eip.arco_eip.id
+  subnet_id                      = aws_subnet.arco_pub_subnet_01.id
+  depends_on = [aws_internet_gateway.arco_intgw]
+
+  tags = {
+    Name = "arco_natgw"
+  }
+}
