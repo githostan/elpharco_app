@@ -21,11 +21,15 @@ key.tf
 .envrc
 .gitattributes
 
-# ignore CLI configuration files
+# ignore cli configuration files
 .terraformrc
 terraform.rc
 
 # crash log files
 crash.log
-crash.*.logterraform.tfstate
+crash.*.log
+
+# local terraform state
+terraform.tfstate
 terraform.tfstate.backup
+
