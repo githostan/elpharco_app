@@ -27,4 +27,5 @@ terraform.rc
 
 # crash log files
 crash.log
-crash.*.log
+crash.*.logterraform.tfstate
+terraform.tfstate.backup
