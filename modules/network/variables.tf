@@ -2,7 +2,6 @@
 ## variable region
 variable "region" {
   type    = string
-  default = "us-east-1"
 }
 ###################################
 ###################################
@@ -10,7 +9,6 @@ variable "region" {
 ## variable vpc
 variable "vpc_cidr" {
   type    = string
-  default = "10.0.0.0/16"
 }
 ###################################
 ###################################
@@ -18,40 +16,32 @@ variable "vpc_cidr" {
 ## variable public_subnet
 variable "pub_subnet_01_cidr" {
   type    = string
-  default = "10.0.0.0/24"
 }
 variable "pub_subnet_01_az" {
   type    = string
-  default = "us-east-1a"
 }
 variable "pub_subnet_02_cidr" {
   type    = string
-  default = "10.0.1.0/24"
 }
 variable "pub_subnet_02_az" {
   type    = string
-  default = "us-east-1b"
 }
 ###################################
 ###################################
 
 ## variable private_subnet
 variable "prvt_subnet_01_cidr" {
-  type    = string
-  default = "10.0.2.0/24"
+    type  = string
 }
 variable "prvt_subnet_01_az" {
-  type    = string
-  default = "us-east-1a"
+    type  = string
 }
 
 variable "prvt_subnet_02_cidr" {
-  type    = string
-  default = "10.0.4.0/24"
+    type  = string
 }
 variable "prvt_subnet_02_az" {
-  type    = string
-  default = "us-east-1b"
+    type  = string
 }
 ###################################
 ###################################
@@ -59,18 +49,14 @@ variable "prvt_subnet_02_az" {
 ## variable db_subnet
 variable "db_subnet_01_cidr" {
   type    = string
-  default = "10.0.5.0/24"
 }
 variable "db_subnet_01_az" {
   type    = string
-  default = "us-east-1a"
 }
 
 variable "db_subnet_02_cidr" {
   type    = string
-  default = "10.0.6.0/24"
 }
 variable "db_subnet_02_az" {
   type    = string
-  default = "us-east-1b"
 }
