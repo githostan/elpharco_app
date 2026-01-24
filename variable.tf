@@ -95,7 +95,6 @@ variable "key_name" {
 
 variable "userdata_file" {
     type  = string
-  
   default = "base_ami_config.sh"
 }
 ###################################

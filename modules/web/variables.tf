@@ -1,4 +1,14 @@
 
+variable "vpc_id" {
+  type = string
+}
+
+variable "public_subnet_ids" {
+  type = list(string)
+}
+###################################
+###################################
+
 ## variable os, instance_type, key and userdata
 variable "os_name" {
     type  = string
@@ -17,3 +27,6 @@ variable "userdata_file" {
 }
 ###################################
 ###################################
+
+
+

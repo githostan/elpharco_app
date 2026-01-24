@@ -38,7 +38,7 @@ resource "aws_launch_template" "arco_web" {
 resource "aws_security_group" "arco_web_sg" {
   name        = "arco_web_sg"
   description = "allow ssh on port 22 & http on port 80"  # Security group for instances launched by the launch template
-  vpc_id      = aws_vpc.arco_infra.id
+  vpc_id      = var.vpc_id
 
 // Define inbound and outbound rules as needed
   ingress {

@@ -31,3 +31,18 @@ module "network" {
   db_subnet_02_cidr   = var.db_subnet_02_cidr
   db_subnet_02_az     = var.db_subnet_02_az
 }
+
+module "web" {
+  source = "./modules/web"
+
+  # from network-module
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+
+  # from the web config
+  os_name          = var.os_name
+  instance_type    = var.instance_type
+  key_name         = var.key_name
+  userdata_file = var.userdata_file
+}
+

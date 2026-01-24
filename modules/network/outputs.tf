@@ -7,53 +7,66 @@ output "vpc_id" {
 #######################################################################################################################################################
 
 ## public_subnets ##############
+output "public_subnet_ids" {
+  value = [
+    aws_subnet.arco_pub_subnet_01.id,
+    aws_subnet.arco_pub_subnet_02.id
+  ]
+}
 
 # output "public_subnet_ids" {
 #   value = [aws_subnet.arco_pub_subnet_01.id,aws_subnet.arco_pub_subnet_02.id]
 # }
 
-output "pub_subnet_01_id" {
-    value = aws_subnet.arco_pub_subnet_01.id
-}
+# output "pub_subnet_01_id" {
+#     value = aws_subnet.arco_pub_subnet_01.id
+# }
 
-output "pub_subnet_02_id" {
-    value = aws_subnet.arco_pub_subnet_02.id
-}
+# output "pub_subnet_02_id" {
+#     value = aws_subnet.arco_pub_subnet_02.id
+# }
 #######################################################################################################################################################
 #######################################################################################################################################################
 
 ## private_subnets ##############
 
-# output "private_subnet_ids" {
-#   value = [
-#     aws_subnet.arco_prvt_subnet_01.id,
-#     aws_subnet.arco_prvt_subnet_02.id
-#   ]
+output "private_subnet_ids" {
+  value = [
+    aws_subnet.arco_prvt_subnet_01.id,
+    aws_subnet.arco_prvt_subnet_02.id
+  ]
+}
+
+# output "prvt_subnet_01_id" {
+#     value = aws_subnet.arco_prvt_subnet_01.id
 # }
 
-output "prvt_subnet_01_id" {
-    value = aws_subnet.arco_prvt_subnet_01.id
-}
-
-output "prvt_subnet_02_id" {
-    value = aws_subnet.arco_prvt_subnet_02.id
-}
+# output "prvt_subnet_02_id" {
+#     value = aws_subnet.arco_prvt_subnet_02.id
+# }
 #######################################################################################################################################################
 #######################################################################################################################################################
 
 ## db_subnets ##############
 
-output "db_subnet_01_id" {
-    value = aws_subnet.arco_db_subnet_01.id
-}
-
-output "db_subnet_02_id" {
-    value = aws_subnet.arco_db_subnet_02.id
+output "db_subnet_ids" {
+  value = [
+    aws_subnet.arco_db_subnet_01.id,
+    aws_subnet.arco_db_subnet_02.id
+  ]
 }
 
 output "db_subnet_grp_id" {
     value = aws_db_subnet_group.arco_db_subnet_grp.id
 }
+
+# output "db_subnet_01_id" {
+#     value = aws_subnet.arco_db_subnet_01.id
+# }
+
+# output "db_subnet_02_id" {
+#     value = aws_subnet.arco_db_subnet_02.id
+# }
 
 #######################################################################################################################################################
 #######################################################################################################################################################
