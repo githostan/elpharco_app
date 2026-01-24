@@ -74,3 +74,29 @@ variable "db_subnet_02_az" {
   type    = string
   default = "us-east-1b"
 }
+###################################
+###################################
+
+## variable os, instance_type, key and userdata
+variable "os_name" {
+    type  = string
+  default = "ami-02d7fd1c2af6eead0"
+}
+
+variable "instance_type" {
+    type  = string
+  default = "t2.micro"
+}
+
+variable "key_name" {
+    type  = string
+  default = "elpharco_keyPair"
+}
+
+variable "userdata_file" {
+    type  = string
+  
+  default = "base_ami_config.sh"
+}
+###################################
+###################################
