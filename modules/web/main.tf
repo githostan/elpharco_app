@@ -33,3 +33,37 @@ resource "aws_launch_template" "arco_web" {
 }
 #################################################################################################################################################################
 #################################################################################################################################################################
+
+# security groups associated with the webtier architecture
+resource "aws_security_group" "arco_web_sg" {
+  name        = "arco_web_sg"
+  description = "allow ssh on port 22 & http on port 80"  # Security group for instances launched by the launch template
+  vpc_id      = aws_vpc.arco_infra.id
+
+// Define inbound and outbound rules as needed
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    #security_groups  = [aws_security_group.arco_web_alb_sg.id]
+  }
+
+# Outbound Rules
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "web_sg"
+  }
+}
