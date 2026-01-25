@@ -1,5 +1,5 @@
 
-# aws_launch_template for the webtier frontend servers
+### launch_template for the webtier frontend servers ########################################################
 resource "aws_launch_template" "arco_web" {
   name_prefix   = "web_temp"
   image_id      = var.os_name
@@ -34,7 +34,7 @@ resource "aws_launch_template" "arco_web" {
 #################################################################################################################################################################
 #################################################################################################################################################################
 
-# security groups associated with the webtier architecture
+### web tier security groups ########################################################
 resource "aws_security_group" "arco_web_sg" {
   name        = "arco_web_sg"
   description = "allow ssh on port 22 & http on port 80"  # Security group for instances launched by the launch template
@@ -70,17 +70,18 @@ resource "aws_security_group" "arco_web_sg" {
 ######################################################################################################################################################
 #######################################################################################################################################################
 
-# auto scaling group for the web-tier frontend servers
-# automatically launches and terminates ec2 instances across multiple AZs, using the public subnets provided by the network module.
+# asg automatically launches & terminates ec2 instances across multi-AZs, using the public subnets provided by the network module.
 # ensures high availability by distributing instances across public subnets and scaling capacity based on demand.
+
+### auto scaling group for the web-tier frontend servers ########################################################
 resource "aws_autoscaling_group" "arco_web_asg" {
   name_prefix = "web_asg"
   #availability_zones = ["us-east-1a", "us-east-1b"]
   desired_capacity   = 2
   max_size           = 5
   min_size           = 2
-  vpc_zone_identifier = [aws_subnet.arco_pub_subnet_01.id, aws_subnet.arco_pub_subnet_02.id]  # public subnet ids
-  target_group_arns = [aws_lb_target_group.arco_web_target_grp_alb.arn]
+  vpc_zone_identifier = var.public_subnet_ids  # public subnet ids
+  target_group_arns = [aws_lb_target_group.arco_web_tg.arn]
   health_check_type = "ELB"
   health_check_grace_period = 300  # Optional but recommended
 
@@ -98,7 +99,7 @@ resource "aws_autoscaling_group" "arco_web_asg" {
 
    tag {
     key                 = "Name"
-    value               = "web_instance"
+    value               = "web_server"
     propagate_at_launch = true
   }
 }
@@ -109,7 +110,7 @@ resource "aws_autoscaling_group" "arco_web_asg" {
 # maintains performance by adjusting instance count according to load
 resource "aws_autoscaling_policy" "web_cpu_policy" {
   name                   = "cpu_scaling_policy"
-  policy_type            = "targetTrackingScaling"
+  policy_type            = "TargetTrackingScaling"
   autoscaling_group_name = aws_autoscaling_group.arco_web_asg.name
 
   target_tracking_configuration {
@@ -120,6 +121,102 @@ resource "aws_autoscaling_policy" "web_cpu_policy" {
     target_value = 90.0  # target cpu utilization
   }
 }
-
 ######################################################################################################################################################
 #######################################################################################################################################################
+
+# application load balancer distributing traffic to the web-tier / routing external traffic to the asg instances
+
+### alb for the web tier frontend servers ########################################################
+resource "aws_lb" "arco_web_alb" {
+  name               = "arco-web-alb"
+  internal           = false  # The alb is Internet-facing and not internal
+  load_balancer_type = "application"
+  ip_address_type    = "ipv4"
+  security_groups    = [aws_security_group.arco_web_alb_sg.id] 
+  subnets            = var.public_subnet_ids  # public subnet IDs
+
+  tags = {
+    Name = "web_alb"
+  }
+}
+
+# frontend listener for the web tier alb, forwarding http traffic to the target group
+# web tier alb listener handling inbound http traffic
+
+### alb listener for the web-tier (frontend) ########################################################
+resource "aws_lb_listener" "arco_web_listener" {
+  load_balancer_arn = aws_lb.arco_web_alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.arco_web_tg.arn
+  }
+}
+
+# alb target group for routing traffic to the web tier instances
+resource "aws_lb_target_group" "arco_web_tg" {
+  name     = "arco-web-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  target_type = "instance"
+
+  health_check {
+    enabled = true
+    path                = "/"
+    matcher             = 200
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 65
+    interval            = 70
+    unhealthy_threshold = 3
+    healthy_threshold   = 3
+  }
+
+  tags = {
+    Name = "web_target_grp"
+  }
+}
+
+# frontend lb target group attachment
+resource "aws_autoscaling_attachment" "arco_web_asg_attach" {
+  autoscaling_group_name = aws_autoscaling_group.arco_web_asg.id
+  lb_target_group_arn    = aws_lb_target_group.arco_web_tg.arn
+}
+
+#####################################################################################################################################################################
+######################################################################################################################################################################
+
+### webtier alb security group ########################################################
+resource "aws_security_group" "arco_web_alb_sg" {
+  name        = "arco_web_alb_sg"
+  description = "allow http on port 80"  #Security group for the application load balancer
+  vpc_id      = var.vpc_id
+
+  // define ingress rules for the security group
+  // example: Allow inbound http traffic from anywhere
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # allow http traffic from anywhere (you may want to restrict this)
+  }
+
+  // define egress rules for the security group
+  // example: allow outbound traffic to anywhere
+  # outbound rules
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "web_alb_sg"
+  }
+}
+#####################################################################################################################
+#####################################################################################################################

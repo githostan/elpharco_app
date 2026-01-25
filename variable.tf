@@ -90,7 +90,7 @@ variable "instance_type" {
 
 variable "key_name" {
     type  = string
-  default = "elpharco_keyPair"
+  default = "elpharco-keyPair"
 }
 
 variable "userdata_file" {
